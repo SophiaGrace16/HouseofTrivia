@@ -31,7 +31,7 @@ class CLI
     def aaq
         Question.all
         str=Question.all.first.question
-        new_str=str.gsub("&quot;",'"').gsub("&#039;","'")
+        new_str=str.gsub("&quot;",'"').gsub("&#039;","'").gsub("&amp;","&")
         # binding.pry
         puts "Difficulty: #{Question.all.first.difficulty}"
         puts "Your question is... #{new_str}"

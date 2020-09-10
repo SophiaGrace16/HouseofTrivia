@@ -1,15 +1,16 @@
 #!/usr/bin/env ruby
 
-require "bundler/setup"
-require "house_of_trivia"
-require 'rest-client'
-require 'json'
-require 'pry'
+# require "bundler/setup"
+# require "house_of_trivia"
+# require 'rest-client'
+# require 'json'
+# require 'pry'
 
-require_relative '../lib/category'
-require_relative '../lib/question'
-require_relative '../lib/api'
-require_relative '../lib/cli'
+# require_relative '../house_of_trivia/lib/category'
+# require_relative '../house_of_trivia/lib/question'
+# require_relative '../house_of_trivia/lib/api'
+# require_relative '../house_of_trivia/lib/cli'
 
-CLI.new.run
-
+# CLI.new.run
+# # require "irb"
+# # IRB.start(__FILE__)
