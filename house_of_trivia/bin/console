@@ -2,13 +2,14 @@
 
 require "bundler/setup"
 require "house_of_trivia"
+require 'rest-client'
+require 'json'
+require 'pry'
 
-# You can add fixtures and/or initialization code here to make experimenting
-# with your gem easier. You can also use a different console, if you like.
+require_relative '../lib/category'
+require_relative '../lib/question'
+require_relative '../lib/api'
+require_relative '../lib/cli'
 
-# (If you use this, don't forget to add pry to your Gemfile!)
-# require "pry"
-# Pry.start
+CLI.new.run
 
-require "irb"
-IRB.start(__FILE__)
