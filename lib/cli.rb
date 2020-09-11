@@ -21,11 +21,18 @@ class CLI
     def menu
         user_input = gets.chomp
         input = user_input.to_i-1
-        category = Category.all[input]
-        Api.create_question(category)
-        aaq
-        check?
-        new_game
+        if !input.between?(0,23)
+            puts "That number isn't even on the list! Come on... this is only the first question"
+            sleep 0.3
+            list_categories
+            menu
+        else
+            category = Category.all[input]
+            Api.create_question(category)
+            aaq
+            check?
+            new_game
+        end
     end
         
     def aaq
@@ -33,7 +40,7 @@ class CLI
         str=Question.all.first.question
         new_str=str.gsub("&quot;",'"').gsub("&#039;","'").gsub("&amp;","&")
         # binding.pry
-        puts "Difficulty: #{Question.all.first.difficulty}"
+        puts "Difficulty: #{Question.all.first.difficulty.upcase}"
         puts "Your question is... #{new_str}"
         puts "Choose an answer below, then enter the number you think is correct!"
     end 
@@ -42,12 +49,35 @@ class CLI
         answ = Question.all.first.answers_arr.flatten
         answ_shuffle= answ.shuffle.each.with_index(1) {|answer, index| puts "#{index}. #{answer}"}
         user_answer = gets.chomp.to_i-1
-        if answ_shuffle[user_answer] == answ[0]
+        if !user_answer.between?(0,3)
+            puts "That's not even an answer choice!"
+            sleep 0.2
+            aaq
+            check?
+        elsif answ_shuffle[user_answer] == answ[0]
             puts "Correctomundo! Good job!"
         else answ_shuffle[user_answer] != answ[0]
-            puts "WRONG. The correct answer is #{Question.all.first.correct_answer}."
+            puts "WRONG. Do you want to try again? Y/N"
+            try_again
         end
-    end  
+    end 
+
+    def try_again
+        input = gets.chomp.downcase
+        if input == "y"
+            aaq
+            check? 
+        elsif input == "n"
+            puts "Really? You don't wanna try again??"
+            puts "Ok then...The correct answer is #{Question.all.first.correct_answer}."
+        else
+            puts "ummm... it was a yes or no question.... back to the beginnning you go!"
+            sleep 0.4
+                Question.reset
+                list_categories
+                menu
+        end   
+    end
 
     def new_game
         puts "Do you want to play again?"
