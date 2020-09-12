@@ -38,8 +38,8 @@ class CLI
     def aaq
         Question.all
         str=Question.all.first.question
-        new_str=str.gsub("&quot;",'"').gsub("&#039;","'").gsub("&amp;","&")
-        # binding.pry
+        new_str=str.gsub("&quot;",'"').gsub("&#039;","'").gsub("&amp;",'&')
+        line
         puts "Difficulty: #{Question.all.first.difficulty.upcase}"
         puts "Your question is... #{new_str}"
         puts "Choose an answer below, then enter the number you think is correct!"
@@ -47,17 +47,30 @@ class CLI
 
     def check?
         answ = Question.all.first.answers_arr.flatten
-        answ_shuffle= answ.shuffle.each.with_index(1) {|answer, index| puts "#{index}. #{answer}"}
+        # answ_list = []
+        # answ_sub = answ.each do |answer| 
+        #     answer.gsub("&quot;",'"').gsub("&#039;","'").gsub("&amp;","&").gsub("&egrave;","e").gsub("&ntilde;","n").gsub("&aacute;","a")
+        #     end
+        # answ_list << answ.each do |answer| 
+        #     answer.gsub("&quot;",'"').gsub("&#039;","'").gsub("&amp;","&").gsub("&egrave;","e").gsub("&ntilde;","n").gsub("&aacute;","a")
+        #     end
+        answ_shuffle = answ.shuffle.each.with_index(1) {|answer, index| puts "#{index}. #{answer}"}
         user_answer = gets.chomp.to_i-1
         if !user_answer.between?(0,3)
             puts "That's not even an answer choice!"
-            sleep 0.2
+            line
+            sleep 1
             aaq
             check?
         elsif answ_shuffle[user_answer] == answ[0]
-            puts "Correctomundo! Good job!"
+            line
+            puts "CORRECT! Look at you go with your big brain!"
+            line
+            sleep 1
         else answ_shuffle[user_answer] != answ[0]
             puts "WRONG. Do you want to try again? Y/N"
+            line
+            sleep 1
             try_again
         end
     end 
@@ -72,7 +85,8 @@ class CLI
             puts "Ok then...The correct answer is #{Question.all.first.correct_answer}."
         else
             puts "ummm... it was a yes or no question.... back to the beginnning you go!"
-            sleep 0.4
+            sleep 1
+            line
                 Question.reset
                 list_categories
                 menu
@@ -82,16 +96,21 @@ class CLI
     def new_game
         puts "Do you want to play again?"
         puts "Please enter Y or N"
+        line
         input = gets.chomp.downcase
             if input == "y" 
             Question.reset
+            line
             list_categories
             menu
             elsif input == "n"
                 puts "Questions too hard? That's okay... you can always comeback later!"
+                line
                 exit
             else 
                 puts "Your answer disappeared into the oblivion. Try again. "
+                line
+                sleep 1
                 Question.reset
                 list_categories
                 menu
@@ -118,6 +137,10 @@ class CLI
                                             Please select a number to receive a question from that category:
 
         EOF
+    end
+
+    def line
+        puts ". . . . . . . . . . . . . . . . . . . . . . . . . . . . "
     end
 end
 
